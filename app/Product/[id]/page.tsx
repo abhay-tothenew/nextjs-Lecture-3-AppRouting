@@ -4,7 +4,7 @@ export async function generateStaticParams() {
   const res = await fetch("https://dummyjson.com/products");
   const data = await res.json();
 
-  return data.products.map((product: any) => {
+  return data.products.map((product: {id:number}) => {
     return {
       id: product.id.toString(),
     };
@@ -14,9 +14,10 @@ export async function generateStaticParams() {
 export default async function ProductPage({
     params,
   }: {
-    params: { id: string };
+    params: Promise<{ id: string }>;
   }) {
-    const product = await fetch(`https://dummyjson.com/products/${params.id}`);
+    const { id } = await params;
+    const product = await fetch(`https://dummyjson.com/products/${id}`);
     const result = await product.json();
     
     return (

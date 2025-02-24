@@ -1,13 +1,9 @@
 "use client";
 import useSWR from "swr";
-import { useRouter } from "next/navigation";
-import styles from "../../page.module.css";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function Product() {
-  const router = useRouter();
-
   const { data, error } = useSWR("https://dummyjson.com/products", fetcher);
 
   if (error) {
@@ -15,29 +11,17 @@ export default function Product() {
   }
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.productTitle}>PRODUCTS</h1>
-      <div className={styles.productInfo}>
-        {data?.products.map((item: any, idx: number) => {
+    <div>
+      <h1>PRODUCTS</h1>
+      <div>
+        {data?.products.map((item: { title: string; description: string; price: number; rating: number; stock: number }, idx: number) => {
           return (
             <div key={idx}>
-              <h2 className={styles.productValue}>
-                <strong className={styles.productLabel}>TITLE: </strong>
-                {item.title}
-              </h2>
-              <p className={styles.productValue}>
-                <strong className={styles.productLabel}>DESCRIPTION: </strong>
-                {item.description}
-              </p>
-
-              <button
-                className={styles.productButton}
-                onClick={() => {
-                  router.push(`/Product/${item.id}`);
-                }}
-              >
-                VIEW DETAILS
-              </button>
+              <h2>{item.title}</h2>
+              <p>{item.description}</p>
+              <p>{item.price}</p>
+              <p>{item.rating}</p>
+              <p>{item.stock}</p>
             </div>
           );
         })}
