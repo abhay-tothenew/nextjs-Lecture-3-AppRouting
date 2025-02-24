@@ -17,7 +17,11 @@ export default async function ProductPage({
     params: Promise<{ id: string }>;
   }) {
     const { id } = await params;
-    const product = await fetch(`https://dummyjson.com/products/${id}`);
+    const product = await fetch(`https://dummyjson.com/products/${id}`,{
+        next:{
+            revalidate:10
+        }
+    });
     const result = await product.json();
     
     return (
